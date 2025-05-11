@@ -87,7 +87,7 @@ public sealed class BlockchainsCollectorHostedService : BackgroundService
                             }
                         }
                     }
-                    while (isAcuredToken && !cancellationToken.IsCancellationRequested);
+                    while (!isAcuredToken && !cancellationToken.IsCancellationRequested);
                 }
             }
             catch (OperationCanceledException ex)

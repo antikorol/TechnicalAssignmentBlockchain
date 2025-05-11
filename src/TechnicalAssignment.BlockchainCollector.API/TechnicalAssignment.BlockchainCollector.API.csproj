@@ -33,4 +33,9 @@
     <ProjectReference Include="..\TechnicalAssignment.BlockchainCollector.Infrastructure\TechnicalAssignment.BlockchainCollector.Infrastructure.csproj" />
   </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="TechnicalAssignment.BlockchainCollector.API.FunctionalTests" />
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+
 </Project>

@@ -30,6 +30,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlockchainCollector", "Bloc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.Gateway.API", "src\TechnicalAssignment.Gateway.API\TechnicalAssignment.Gateway.API.csproj", "{0A4851AB-26D6-4DE5-9F2F-D1DC4492D488}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{8F518FC6-DC94-48CE-9DFB-C480909A5E29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalTests", "FunctionalTests", "{DD9BA28B-5983-432B-98E9-3924D250B6F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{C03B32EF-4CB8-4047-AC8D-66BD49C7D281}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.Application.UnitTests", "tests\TechnicalAssignment.BlockchainCollector.Application.UnitTests\TechnicalAssignment.BlockchainCollector.Application.UnitTests.csproj", "{75354B3B-67E9-4ECF-BFE9-58FE0508C48E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.Infrastructure.UnitTests", "tests\TechnicalAssignment.BlockchainCollector.Infrastructure.UnitTests\TechnicalAssignment.BlockchainCollector.Infrastructure.UnitTests.csproj", "{A50AA1AF-6F1A-44C9-91CA-C344C080C507}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.API.FunctionalTests", "tests\TechnicalAssignment.BlockchainCollector.API.FunctionalTests\TechnicalAssignment.BlockchainCollector.API.FunctionalTests.csproj", "{43B11575-D067-4E70-BC8D-508A7E66E4F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +72,18 @@ Global
 		{0A4851AB-26D6-4DE5-9F2F-D1DC4492D488}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A4851AB-26D6-4DE5-9F2F-D1DC4492D488}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A4851AB-26D6-4DE5-9F2F-D1DC4492D488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75354B3B-67E9-4ECF-BFE9-58FE0508C48E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75354B3B-67E9-4ECF-BFE9-58FE0508C48E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75354B3B-67E9-4ECF-BFE9-58FE0508C48E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75354B3B-67E9-4ECF-BFE9-58FE0508C48E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A50AA1AF-6F1A-44C9-91CA-C344C080C507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A50AA1AF-6F1A-44C9-91CA-C344C080C507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A50AA1AF-6F1A-44C9-91CA-C344C080C507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A50AA1AF-6F1A-44C9-91CA-C344C080C507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43B11575-D067-4E70-BC8D-508A7E66E4F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43B11575-D067-4E70-BC8D-508A7E66E4F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43B11575-D067-4E70-BC8D-508A7E66E4F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43B11575-D067-4E70-BC8D-508A7E66E4F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +96,12 @@ Global
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
 		{1F58D3F0-4CB5-4BF5-B69F-79DAA2D996A0} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
 		{0A4851AB-26D6-4DE5-9F2F-D1DC4492D488} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{8F518FC6-DC94-48CE-9DFB-C480909A5E29} = {664D406C-2F83-48F0-BFC3-408D5CB53C65}
+		{DD9BA28B-5983-432B-98E9-3924D250B6F3} = {664D406C-2F83-48F0-BFC3-408D5CB53C65}
+		{C03B32EF-4CB8-4047-AC8D-66BD49C7D281} = {664D406C-2F83-48F0-BFC3-408D5CB53C65}
+		{75354B3B-67E9-4ECF-BFE9-58FE0508C48E} = {8F518FC6-DC94-48CE-9DFB-C480909A5E29}
+		{A50AA1AF-6F1A-44C9-91CA-C344C080C507} = {8F518FC6-DC94-48CE-9DFB-C480909A5E29}
+		{43B11575-D067-4E70-BC8D-508A7E66E4F4} = {DD9BA28B-5983-432B-98E9-3924D250B6F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3CB609D9-5D54-4C11-A371-DAAC8B74E430}

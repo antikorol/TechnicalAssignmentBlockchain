@@ -8,7 +8,6 @@ using TechnicalAssignment.BlockchainCollector.Application.Validators;
 using TechnicalAssignment.BlockchainCollector.Application.Mappings;
 using MediatR;
 using TechnicalAssignment.BlockchainCollector.Domain.Events;
-using System.Xml.Linq;
 using TechnicalAssignment.BlockchainCollector.Application.Pagination;
 
 namespace TechnicalAssignment.BlockchainCollector.Application.Services;

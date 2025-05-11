@@ -8,7 +8,7 @@ internal static class BlockchainErrors
     public static Error RateLimitExceeded() =>
         Error.Problem(
             "Blockchain.RateLimitExceeded",
-            $"Rate Limit Exceeded");
+            "Rate Limit Exceeded");
 
     public static Error ApiError(HttpStatusCode statusCode) =>
         Error.Problem(

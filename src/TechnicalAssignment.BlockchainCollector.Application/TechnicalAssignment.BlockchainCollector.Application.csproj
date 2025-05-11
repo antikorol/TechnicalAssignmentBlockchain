@@ -19,4 +19,9 @@
     <ProjectReference Include="..\TechnicalAssignment.BlockchainCollector.Domain\TechnicalAssignment.BlockchainCollector.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="TechnicalAssignment.BlockchainCollector.Application.UnitTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
 </Project>
