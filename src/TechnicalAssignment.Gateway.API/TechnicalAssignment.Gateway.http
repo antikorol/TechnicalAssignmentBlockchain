@@ -1,0 +1,12 @@
+@TechnicalAssignment.Gateway_HostAddress = http://localhost:5008
+
+
+GET {{TechnicalAssignment.Gateway_HostAddress}}/blockchain-api/public/btc/main
+Accept: application/json
+
+###
+
+GET {{TechnicalAssignment.Gateway_HostAddress}}/blockchain-api/public/btc/main/history?offset=0&limit=10
+Accept: application/json
+
+###

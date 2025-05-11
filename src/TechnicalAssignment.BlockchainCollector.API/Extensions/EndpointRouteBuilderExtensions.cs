@@ -34,10 +34,10 @@ internal static class EndpointRouteBuilderExtensions
             async (
                 [FromRoute] string coin,
                 [FromRoute] string chain,
-                [FromQuery] uint offset,
                 CancellationToken token,
                 IMapper mapper,
                 IBlockchainService blockchainService,
+                [FromQuery] uint offset = 0,
                 [FromQuery] uint limit = 10) =>
             {
                 var result = await blockchainService.LoadHistoryAsync(coin, chain, offset, limit, token);

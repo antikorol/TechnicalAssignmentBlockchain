@@ -50,7 +50,7 @@ Blockcypher:
     Rules:
       - Name: PerHour
         Period: Hour
-        Requests: 50
+        Requests: 10
       - Name: PerSecond
         Period: Second
         Requests: 1

@@ -1,0 +1,40 @@
+Application: Gateway.API
+
+ReverseProxy:
+  Routes:
+    blockchain-route:
+      ClusterId: blockchain-cluster
+      Match:
+        Path: "blockchain-api/public/{**catch-all}"
+      Transforms:
+      - PathPattern: "api/public/{**catch-all}"
+  Clusters:
+    blockchain-cluster:
+      Destinations:
+        destination1:
+          Address: http://technicalassignment.blockchaincollector.api:8080/
+
+OpenTelemetry:
+  Otlp:
+    Endpoint: http://blockchain-api-seq:5341/ingest/otlp/v1/traces
+    Protocol: HttpProtobuf
+
+Serilog:
+  Using:
+    - Serilog.Sinks.Console
+    - Serilog.Sinks.Seq
+  MinimumLevel:
+    Default: Information
+    Override:
+      Microsoft: Information
+  WriteTo:
+    - Name: Console
+    - Name: Seq
+      Args:
+        serverUrl: http://blockchain-api-seq:5341
+  Enrich:
+   - FromLogContext
+   - WithMachineName
+   - WithThreadId
+  Properties:
+    Application: Gateway.API

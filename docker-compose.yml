@@ -6,7 +6,19 @@ services:
       dockerfile: src/TechnicalAssignment.BlockchainCollector.API/Dockerfile
     ports:
       - 5000:8080
- 
+    networks:
+      - technicalassignment
+
+  technicalassignment.gateway.api:
+    image: ${DOCKER_REGISTRY-}gateway-api
+    build:
+      context: .
+      dockerfile: src/TechnicalAssignment.Gateway.Api/Dockerfile
+    ports:
+      - 5008:8080
+    networks:
+      - technicalassignment
+
   postgres:
     image: postgres:17
     container_name: postgres
@@ -18,6 +30,8 @@ services:
       - ./.containers/db:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    networks:
+      - technicalassignment
 
   redis:
     image: redis:7.2
@@ -28,6 +42,8 @@ services:
     volumes:
       - ./.containers/db:/data
     restart: unless-stopped
+    networks:
+      - technicalassignment
 
   seq:
     image: datalust/seq:2024.3
@@ -37,3 +53,8 @@ services:
     ports:
       - 5341:5341
       - 8081:80
+    networks:
+      - technicalassignment
+
+networks:
+  technicalassignment:
