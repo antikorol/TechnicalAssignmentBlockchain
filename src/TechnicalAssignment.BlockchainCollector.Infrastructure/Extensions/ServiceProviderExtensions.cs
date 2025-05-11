@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace TechnicalAssignment.BlockchainCollector.Infrastructure.Extensions;
 
-public static class BlockchainDbContextInitialiser
+public static class ServiceProviderExtensions
 {
     public static async Task InitialiseDatabaseAsync(this IServiceProvider serviceProvider)
     {

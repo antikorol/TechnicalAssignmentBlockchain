@@ -113,7 +113,7 @@ internal sealed class BlockchainService : IBlockchainService
         if (validationResult.IsFailed)
             return validationResult;
 
-        var name = "{coin}.{chain}";
+        var name = $"{coin}.{chain}";
 
         return await _blockchainRepository.LoadHistoryAsync(name, offset, limit, cancellationToken);
     }

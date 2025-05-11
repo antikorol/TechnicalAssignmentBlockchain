@@ -46,3 +46,11 @@ Blockchain:
 
 Blockcypher:
   Host: https://api.blockcypher.com
+  RateLimits:
+    Rules:
+      - Name: PerHour
+        Period: Hour
+        Requests: 50
+      - Name: PerSecond
+        Period: Second
+        Requests: 1

@@ -22,17 +22,17 @@ internal sealed class BlockchainRepository : IBlockchainRepository
 
     public Task<Blockchain?> FindByHashAsync(string hash, CancellationToken cancellationToken) =>
         _blockchainDbContext.Blockchains
-                .FirstOrDefaultAsync(b => b.Hash == hash);
+            .FirstOrDefaultAsync(b => b.Hash == hash);
 
     public async Task<PagedItems<Blockchain>> LoadHistoryAsync(string name, uint offset, uint limit, CancellationToken cancellationToken)
     {
         var items = await _blockchainDbContext.Blockchains
-                .AsNoTracking()
-                .Where(b => b.Name.ToLower() == name.ToLower())
-                .OrderByDescending(b => b.CreatedAt)
-                .Skip((int)offset)
-                .Take((int)limit + 1)
-                .ToListAsync();
+            .AsNoTracking()
+            .Where(b => b.Name.ToLower() == name.ToLower())
+            .OrderByDescending(b => b.CreatedAt)
+            .Skip((int)offset)
+            .Take((int)limit + 1)
+            .ToListAsync();
 
         var hasNext = items.Count > limit;
 

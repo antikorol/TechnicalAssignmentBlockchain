@@ -20,8 +20,8 @@ public static class ServiceCollectionExtensions
            .AddSingleton<IBlockchainValidator, BlockchainValidator>()
            .AddSingleton<IMapper, MapperlyMapper>()
            .AddScoped<IBlockchainService, BlockchainService>()
-           .AddHostedService<NewBlocksProcessingHostedService>()
-           .AddHostedService<BlocksCollectorHostedService>()
+           .AddHostedService<NewBlockchainsProcessingHostedService>()
+           .AddHostedService<BlockchainsCollectorHostedService>()
            .AddMediatR(
                 cfg =>
                 {

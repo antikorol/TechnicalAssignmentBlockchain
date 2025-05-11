@@ -1,21 +1,22 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using TechnicalAssignment.BlockchainCollector.Application.Interfaces;
 using TechnicalAssignment.BlockchainCollector.Domain.Events;
 
 namespace GameFlinker.BK.Payments.Domain.HostedServices;
 
-public sealed class BlocksCollectorHostedService : BackgroundService
+public sealed class NewBlockchainsProcessingHostedService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IInternalServiceBus<BlockReceived> _newBlocksServiceBus;
-    private readonly ILogger<BlocksCollectorHostedService> _logger;
+    private readonly ILogger<NewBlockchainsProcessingHostedService> _logger;
 
-    public BlocksCollectorHostedService(
+    public NewBlockchainsProcessingHostedService(
         IServiceProvider serviceProvider,
         IInternalServiceBus<BlockReceived> newBlocksServiceBus,
-        ILogger<BlocksCollectorHostedService> logger
+        ILogger<NewBlockchainsProcessingHostedService> logger
 )
     {
         _serviceProvider = serviceProvider;
