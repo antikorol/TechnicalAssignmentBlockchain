@@ -1,0 +1,21 @@
+Postgres:
+  ConnectionString: Host=postgres;Port=5432;Database=blockchain-db;Username=postgres;Password=postgres-pwd;Include Error Detail=true
+
+Redis:
+  ConnectionString: redis:6379,password=redis-pwd
+
+Blockchain:
+  Coins:
+    - Code: eth
+      Chain: main
+    - Code: dash
+      Chain: main
+    - Code: btc
+      Chain: main
+    - Code: btc
+      Chain: test3
+    - Code: ltc
+      Chain: main
+
+Blockcypher:
+  Host: https://api.blockcypher.com

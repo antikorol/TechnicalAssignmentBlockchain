@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6ED356A7-8B47-4613-AD01-C85CF28491BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{664D406C-2F83-48F0-BFC3-408D5CB53C65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2DA20AA-28D1-455C-BF50-C49A8F831633}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.Domain", "src\TechnicalAssignment.BlockchainCollector.Domain\TechnicalAssignment.BlockchainCollector.Domain.csproj", "{1A5F453E-305E-4034-901E-A68374439152}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.Application", "src\TechnicalAssignment.BlockchainCollector.Application\TechnicalAssignment.BlockchainCollector.Application.csproj", "{2B304C93-C31B-4309-B7BC-D8F4446F84B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.Infrastructure", "src\TechnicalAssignment.BlockchainCollector.Infrastructure\TechnicalAssignment.BlockchainCollector.Infrastructure.csproj", "{22C28289-CA5F-4ED9-9E52-98A189FAE528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.API", "src\TechnicalAssignment.BlockchainCollector.API\TechnicalAssignment.BlockchainCollector.API.csproj", "{5FB7F929-32EB-4598-B25D-E865293709AC}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A5F453E-305E-4034-901E-A68374439152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A5F453E-305E-4034-901E-A68374439152}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A5F453E-305E-4034-901E-A68374439152}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A5F453E-305E-4034-901E-A68374439152}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B304C93-C31B-4309-B7BC-D8F4446F84B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B304C93-C31B-4309-B7BC-D8F4446F84B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B304C93-C31B-4309-B7BC-D8F4446F84B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B304C93-C31B-4309-B7BC-D8F4446F84B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C28289-CA5F-4ED9-9E52-98A189FAE528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C28289-CA5F-4ED9-9E52-98A189FAE528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C28289-CA5F-4ED9-9E52-98A189FAE528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C28289-CA5F-4ED9-9E52-98A189FAE528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FB7F929-32EB-4598-B25D-E865293709AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FB7F929-32EB-4598-B25D-E865293709AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FB7F929-32EB-4598-B25D-E865293709AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FB7F929-32EB-4598-B25D-E865293709AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A5F453E-305E-4034-901E-A68374439152} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+		{2B304C93-C31B-4309-B7BC-D8F4446F84B8} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+		{22C28289-CA5F-4ED9-9E52-98A189FAE528} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+		{5FB7F929-32EB-4598-B25D-E865293709AC} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CB609D9-5D54-4C11-A371-DAAC8B74E430}
+	EndGlobalSection
+EndGlobal

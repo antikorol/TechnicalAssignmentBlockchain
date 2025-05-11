@@ -1,0 +1,6 @@
+@TechnicalAssignment.BlockchainCollector.API_HostAddress = http://localhost:5163
+
+GET {{TechnicalAssignment.BlockchainCollector.API_HostAddress}}/api/public/btc/main
+Accept: application/json
+
+###

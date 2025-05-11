@@ -1,0 +1,11 @@
+root = true
+
+[*.cs]
+dotnet_diagnostic.RMG009.severity = warning
+dotnet_diagnostic.RMG010.severity = warning
+dotnet_diagnostic.RMG015.severity = warning
+dotnet_diagnostic.RMG026.severity = warning
+dotnet_diagnostic.RMG012.severity = error # Unmapped target member
+dotnet_diagnostic.RMG020.severity = error # Unmapped source member
+dotnet_diagnostic.RMG037.severity = error # Unmapped target enum value
+dotnet_diagnostic.RMG038.severity = error # Unmapped source enum value

@@ -1,0 +1,38 @@
+services:
+  technicalassignment.blockchaincollector.api:
+    image: ${DOCKER_REGISTRY-}blockchain-collector-api
+    build:
+      context: .
+      dockerfile: src/TechnicalAssignment.BlockchainCollector.API/Dockerfile
+    ports:
+      - 5000:8080
+ 
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=blockchain-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres-pwd
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - 6379:6379
+    command: ["redis-server", "--requirepass", "redis-pwd"]
+    volumes:
+      - ./.containers/db:/data
+    restart: unless-stopped
+
+  seq:
+    image: datalust/seq:2024.3
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 8081:80
