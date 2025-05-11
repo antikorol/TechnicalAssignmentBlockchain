@@ -37,6 +37,8 @@ builder.Services
 
 var app = builder.Build();
 
+await app.Services.InitialiseDatabaseAsync();
+
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 if (app.Environment.IsDevelopment())
