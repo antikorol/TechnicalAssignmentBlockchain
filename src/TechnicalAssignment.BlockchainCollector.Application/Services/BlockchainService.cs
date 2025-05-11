@@ -78,7 +78,7 @@ internal sealed class BlockchainService : IBlockchainService
 
         _logger.LogInformation("Received block for the {Name}. Hash: {Hash}; Height: {Height}", block.Name, block.Hash, block.Height);
 
-        var blockchain = _mapper.Map(block, _timeProvider.GetUtcNow().DateTime);
+        var blockchain = _mapper.Map(block, _timeProvider.GetUtcNow().UtcDateTime);
 
         await _mediator.Publish(new BlockReceived(blockchain), cancellationToken);
 

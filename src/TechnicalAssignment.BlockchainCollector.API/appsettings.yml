@@ -1,3 +1,30 @@
+Application: BlockchainCollector.API
+
+OpenTelemetry:
+  Otlp:
+    Endpoint: http://blockchain-api-seq:5341/ingest/otlp/v1/traces
+    Protocol: HttpProtobuf
+
+Serilog:
+  Using:
+    - Serilog.Sinks.Console
+    - Serilog.Sinks.Seq
+  MinimumLevel:
+    Default: Information
+    Override:
+      Microsoft: Information
+  WriteTo:
+    - Name: Console
+    - Name: Seq
+      Args:
+        serverUrl: http://blockchain-api-seq:5341
+  Enrich:
+   - FromLogContext
+   - WithMachineName
+   - WithThreadId
+  Properties:
+    Application: BlockchainCollector.API
+
 Postgres:
   ConnectionString: Host=postgres;Port=5432;Database=blockchain-db;Username=postgres;Password=postgres-pwd;Include Error Detail=true
 

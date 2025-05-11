@@ -31,8 +31,9 @@ services:
 
   seq:
     image: datalust/seq:2024.3
-    container_name: seq
+    container_name: blockchain-api-seq
     environment:
       - ACCEPT_EULA=Y
     ports:
+      - 5341:5341
       - 8081:80
