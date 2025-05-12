@@ -5,14 +5,19 @@ ReverseProxy:
     blockchain-route:
       ClusterId: blockchain-cluster
       Match:
-        Path: "blockchain-api/public/{**catch-all}"
+        Path: "/blockchain-service/api/public/{**catch-all}"
       Transforms:
-      - PathPattern: "api/public/{**catch-all}"
+        - PathRemovePrefix: "/blockchain-service"
   Clusters:
     blockchain-cluster:
       Destinations:
         destination1:
           Address: http://technicalassignment.blockchaincollector.api:8080/
+          Swaggers:
+            - PrefixPath: /blockchain-service
+              PathFilterRegexPattern: ".*/public/.*"
+              Paths:
+                - /swagger/v1/swagger.json
 
 OpenTelemetry:
   Otlp:

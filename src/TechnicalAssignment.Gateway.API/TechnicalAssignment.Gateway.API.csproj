@@ -11,6 +11,7 @@
 
   <ItemGroup>
       <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.15" />
       <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
       <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
       <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
@@ -19,6 +20,8 @@
       <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
       <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+      <PackageReference Include="Treyt.Yarp.ReverseProxy.Swagger" Version="3.9.0" />
       <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
       <PackageReference Include="Yarp.Telemetry.Consumption" Version="2.3.0" />
   </ItemGroup>

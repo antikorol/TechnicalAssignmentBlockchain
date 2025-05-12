@@ -3,9 +3,10 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
-      "serviceActions": {
-        "technicalassignment.blockchaincollector.api": "StartDebugging"
-      }
+        "serviceActions": {
+            "technicalassignment.gateway.api": "StartDebugging",
+            "technicalassignment.blockchaincollector.api": "StartDebugging"
+        }
     }
   }
 }
