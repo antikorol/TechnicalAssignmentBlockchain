@@ -1,22 +1,22 @@
 ﻿using System.Net;
 using TechnicalAssignment.BlockchainCollector.Domain.Errors;
 
-namespace TechnicalAssignment.BlockchainCollector.Application.Validators;
+namespace TechnicalAssignment.BlockchainCollector.Application.Errors;
 
 internal static class BlockchainErrors
 {
-    public static Error RateLimitExceeded() =>
-        Error.Problem(
+    public static DomainError RateLimitExceeded() =>
+        DomainError.Problem(
             "Blockchain.RateLimitExceeded",
             "Rate Limit Exceeded");
 
-    public static Error ApiError(HttpStatusCode statusCode) =>
-        Error.Problem(
+    public static DomainError ApiError(HttpStatusCode statusCode) =>
+        DomainError.Problem(
             "Blockchain.UnexpectedResponse",
             $"External request failed with status code {statusCode}");
 
-    public static Error NotFound(string coin, string chain) =>
-       Error.NotFound(
+    public static DomainError NotFound(string coin, string chain) =>
+       DomainError.NotFound(
             "Blockchain.NotFound",
             $"The coin {coin}.{chain}' was not found");
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TechnicalAssignment.BlockchainCollector.API.Contracts.Responses;
 using TechnicalAssignment.BlockchainCollector.API.Mappings;
 using TechnicalAssignment.BlockchainCollector.Application.Interfaces;
+using TechnicalAssignment.BlockchainCollector.Domain.Errors;
 
 namespace TechnicalAssignment.BlockchainCollector.API.Extensions;
 
@@ -55,12 +56,12 @@ internal static class EndpointRouteBuilderExtensions
 
         static IResult BadRequest<TResult>(Result<TResult> result)
         {
-            if (result.HasError<Domain.Errors.Error>(out var errors))
+            if (result.HasError<DomainError>(out var errors))
             {
                 var error = errors.First();
 
                 return
-                    error.Type == Domain.Errors.ErrorType.NotFound
+                    error.Type == ErrorType.NotFound
                     ? Results.NotFound(new BadRequestResponse(error.Code, error.Message))
                     : Results.BadRequest(new BadRequestResponse(error.Code, error.Message));
             }

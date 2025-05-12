@@ -9,6 +9,7 @@ using TechnicalAssignment.BlockchainCollector.Application.Mappings;
 using TechnicalAssignment.BlockchainCollector.Application.Pagination;
 using TechnicalAssignment.BlockchainCollector.Application.Services;
 using TechnicalAssignment.BlockchainCollector.Domain.Entities;
+using TechnicalAssignment.BlockchainCollector.Domain.Errors;
 
 namespace TechnicalAssignment.BlockchainCollector.Application.UnitTests;
 
@@ -42,7 +43,7 @@ public class BlockchainServiceTests
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Message.ShouldBe(error.Message);
         resultError.Code.ShouldBe(error.Code);
     }
@@ -60,7 +61,7 @@ public class BlockchainServiceTests
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Message.ShouldBe(error.Message);
         resultError.Code.ShouldBe(error.Code);
     }
@@ -86,7 +87,7 @@ public class BlockchainServiceTests
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Code.ShouldBe("Blockchain.RateLimitExceeded");
         resultError.Message.ShouldBe("Rate Limit Exceeded");
     }
@@ -112,7 +113,7 @@ public class BlockchainServiceTests
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Code.ShouldBe("Blockchain.UnexpectedResponse");
         resultError.Message.ShouldBe($"External request failed with status code {HttpStatusCode.BadGateway}");
     }
@@ -138,7 +139,7 @@ public class BlockchainServiceTests
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Code.ShouldBe("Blockchain.NotFound");
         resultError.Message.ShouldBe($"The coin {coin}.{chain}' was not found");
     }
@@ -219,7 +220,7 @@ public class BlockchainServiceTests
         var result = await Subject.LoadHistoryAsync(coin, chain, _fixture.Create<uint>(), _fixture.Create<uint>(), CancellationToken.None);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Message.ShouldBe(error.Message);
         resultError.Code.ShouldBe(error.Code);
     }

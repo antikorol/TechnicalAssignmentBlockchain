@@ -4,11 +4,11 @@ using System.Net;
 using TechnicalAssignment.BlockchainCollector.Application.Blockcypher;
 using TechnicalAssignment.BlockchainCollector.Application.Interfaces;
 using TechnicalAssignment.BlockchainCollector.Domain.Entities;
-using TechnicalAssignment.BlockchainCollector.Application.Validators;
 using TechnicalAssignment.BlockchainCollector.Application.Mappings;
 using MediatR;
 using TechnicalAssignment.BlockchainCollector.Domain.Events;
 using TechnicalAssignment.BlockchainCollector.Application.Pagination;
+using TechnicalAssignment.BlockchainCollector.Application.Errors;
 
 namespace TechnicalAssignment.BlockchainCollector.Application.Services;
 

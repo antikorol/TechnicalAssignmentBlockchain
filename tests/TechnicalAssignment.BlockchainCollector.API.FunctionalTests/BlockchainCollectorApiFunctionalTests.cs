@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Refit;
 using System.Net;
 using System.Net.Http.Json;
@@ -13,7 +12,7 @@ using Testcontainers.Redis;
 
 namespace TechnicalAssignment.BlockchainCollector.API.FunctionalTests;
 
-public class BlockchainCollectorEndpointsFunctionalTests : IAsyncLifetime
+public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
 {
     private readonly AutoMocker _mocker;
     private readonly Fixture _fixture;
@@ -30,7 +29,7 @@ public class BlockchainCollectorEndpointsFunctionalTests : IAsyncLifetime
         .WithImage("redis:7.2")
         .Build();
 
-    public BlockchainCollectorEndpointsFunctionalTests()
+    public BlockchainCollectorApiFunctionalTests()
     {
         _mocker = new AutoMocker();
         _fixture = new Fixture();
@@ -61,15 +60,14 @@ public class BlockchainCollectorEndpointsFunctionalTests : IAsyncLifetime
 
                 builder.ConfigureServices(services =>
                 {
-                    Remove(services, typeof(IBlockchainSdk));
-
+                    RemoveRegistration(services, typeof(IBlockchainSdk));
                     services.AddSingleton<IBlockchainSdk>(_mocker.Get<IBlockchainSdk>());
                 });
             });
     }
 
     [Fact]
-    public async Task GetLastBlockChain_ReturnsResult()
+    public async Task GetLastBlockChain_CoinAndChainSupported_ReturnsResult()
     {
         var dto = _fixture.Create<BlockchainDto>();
         _mocker.GetMock<IApiResponse<BlockchainDto>>()
@@ -91,14 +89,40 @@ public class BlockchainCollectorEndpointsFunctionalTests : IAsyncLifetime
         blockchain.Hash.ShouldBe(dto.Hash);
     }
 
-    private static void Remove(IServiceCollection services, Type type)
+    [Fact]
+    public async Task GetLastBlockChain_CoinIsNotSupported_ReturnsBadRequest()
     {
-        var descriptor = services.SingleOrDefault(d => d.ServiceType == type);
+        var invalidCoin = _fixture.Create<string>();
+        using var client = _applicationFactory.CreateClient();
 
-        if (descriptor != null)
-        {
-            services.Remove(descriptor);
-        }
+        var response = await client.GetAsync($"api/public/{invalidCoin}/main/");
+
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        var badRequest = await response.Content.ReadFromJsonAsync<BadRequestResponse>();
+        badRequest.ShouldNotBeNull();
+        badRequest.Code.ShouldBe("Validation.CoinNotSupported");
+    }
+
+    [Fact]
+    public async Task GetLastBlockChain_RateLimitExceeded_ReturnsBadRequest()
+    {
+        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+           .Setup(s => s.StatusCode)
+           .Returns(HttpStatusCode.TooManyRequests);
+        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+            .Setup(s => s.IsSuccessStatusCode)
+            .Returns(false);
+        _mocker.GetMock<IBlockchainSdk>()
+            .Setup(s => s.GetBlockchainAsync("btc", "main", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+        using var client = _applicationFactory.CreateClient();
+
+        var response = await client.GetAsync("api/public/btc/main/");
+
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        var badRequest = await response.Content.ReadFromJsonAsync<BadRequestResponse>();
+        badRequest.ShouldNotBeNull();
+        badRequest.Code.ShouldBe("Blockchain.RateLimitExceeded");
     }
 
     public async Task InitializeAsync()
@@ -112,5 +136,17 @@ public class BlockchainCollectorEndpointsFunctionalTests : IAsyncLifetime
         await _postgresContainer.StopAsync();
         await _redisContainer.StopAsync();
         _applicationFactory.Dispose();
+    }
+
+    private static void RemoveRegistration(IServiceCollection services, Type type)
+    {
+        var descriptors = services
+            .Where(d => d.ServiceType == type)
+            .ToArray();
+
+        foreach (var descriptor in descriptors)
+        {
+            services.Remove(descriptor);
+        }
     }
 }

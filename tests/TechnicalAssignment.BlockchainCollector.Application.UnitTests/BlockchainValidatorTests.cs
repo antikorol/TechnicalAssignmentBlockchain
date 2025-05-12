@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using TechnicalAssignment.BlockchainCollector.Application.Configurations;
 using TechnicalAssignment.BlockchainCollector.Application.Validators;
+using TechnicalAssignment.BlockchainCollector.Domain.Errors;
 
 namespace TechnicalAssignment.BlockchainCollector.Application.UnitTests;
 
@@ -29,7 +30,7 @@ public class BlockchainValidatorTests
         var result = Subject.Validate("btc", "main");
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Code.ShouldBe("Validation.InvalidConfiguration");
         resultError.Message.ShouldBe("Validation config is invalid");
     }
@@ -46,7 +47,7 @@ public class BlockchainValidatorTests
         var result = Subject.Validate(coin, chain);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Code.ShouldBe("Validation.CoinNotSupported");
         resultError.Message.ShouldBe($"The coin '{coin}' is not supported");
     }
@@ -63,7 +64,7 @@ public class BlockchainValidatorTests
         var result = Subject.Validate(coin, chain);
 
         result.IsFailed.ShouldBeTrue();
-        var resultError = result.Errors[0].ShouldBeOfType<Domain.Errors.Error>();
+        var resultError = result.Errors[0].ShouldBeOfType<DomainError>();
         resultError.Code.ShouldBe("Validation.ChainNotSupported");
         resultError.Message.ShouldBe($"The chain '{chain}' is not supported");
     }

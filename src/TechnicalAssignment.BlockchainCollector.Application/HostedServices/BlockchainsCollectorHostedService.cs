@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using TechnicalAssignment.BlockchainCollector.Application.Configurations;
 using TechnicalAssignment.BlockchainCollector.Application.Interfaces;
+using TechnicalAssignment.BlockchainCollector.Domain.Errors;
 
 namespace GameFlinker.BK.Payments.Domain.HostedServices;
 
@@ -76,7 +77,7 @@ public sealed class BlockchainsCollectorHostedService : BackgroundService
 
                         if (result.IsFailed)
                         {
-                            if (result.HasError<TechnicalAssignment.BlockchainCollector.Domain.Errors.Error>(out var errors))
+                            if (result.HasError<DomainError>(out var errors))
                             {
                                 var error = errors.First();
                                 _logger.LogError("Failed to collect last blockchain for the {Coin}.{Chain}. Reason: {ErrorCode} ({Message})", coin.Code, coin.Chain, error.Code, error.Message);

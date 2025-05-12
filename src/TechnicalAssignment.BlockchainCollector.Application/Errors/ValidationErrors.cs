@@ -4,18 +4,18 @@ namespace TechnicalAssignment.BlockchainCollector.Application.Errors;
 
 internal static class ValidationErrors
 {
-    public static Error InvalidConfiguration() =>
-        Error.Problem(
+    public static DomainError InvalidConfiguration() =>
+        DomainError.Problem(
             "Validation.InvalidConfiguration",
             "Validation config is invalid");
 
-    public static Error CoinNotSupported(string coinCode) =>
-        Error.ValidationFailed(
+    public static DomainError CoinNotSupported(string coinCode) =>
+        DomainError.ValidationFailed(
             "Validation.CoinNotSupported",
             $"The coin '{coinCode}' is not supported");
 
-    public static Error ChainNotSupported(string chain) =>
-        Error.ValidationFailed(
+    public static DomainError ChainNotSupported(string chain) =>
+        DomainError.ValidationFailed(
             "Validation.ChainNotSupported",
             $"The chain '{chain}' is not supported");
 }

@@ -2,7 +2,7 @@
 
 namespace TechnicalAssignment.BlockchainCollector.Domain.Errors;
 
-public class Error : IError
+public class DomainError : IError
 {
     public ErrorType Type { get; set; }
     public string Code { get; }
@@ -10,37 +10,37 @@ public class Error : IError
     public List<IError> Reasons { get; } = new List<IError>();
     public Dictionary<string, object> Metadata { get; } = new Dictionary<string, object>();
 
-    public Error(string code, string message, ErrorType type)
+    public DomainError(string code, string message, ErrorType type)
     {
         Code = code;
         Message = message;
         Type = type;
     }
 
-    public Error(string code, string message, ErrorType type, Exception exception)
+    public DomainError(string code, string message, ErrorType type, Exception exception)
         : this(code, message, ErrorType.Failure)
     {
         Reasons.Add(new ExceptionalError(exception));
     }
 
-    public Error(string code, string message, ErrorType type, IError error)
+    public DomainError(string code, string message, ErrorType type, IError error)
         : this(code, message, ErrorType.Failure)
     {
         Reasons.Add(error);
     }
 
-    public static Error Failure(string code, string message) =>
+    public static DomainError Failure(string code, string message) =>
        new(code, message, ErrorType.Failure);
 
-    public static Error Failure(string code, string message, Exception exception) =>
+    public static DomainError Failure(string code, string message, Exception exception) =>
        new(code, message, ErrorType.Failure, exception);
 
-    public static Error NotFound(string code, string message) =>
+    public static DomainError NotFound(string code, string message) =>
         new(code, message, ErrorType.NotFound);
 
-    public static Error Problem(string code, string message) =>
+    public static DomainError Problem(string code, string message) =>
         new(code, message, ErrorType.Problem);
 
-    public static Error ValidationFailed(string code, string message) =>
+    public static DomainError ValidationFailed(string code, string message) =>
         new(code, message, ErrorType.Validation);
 }
