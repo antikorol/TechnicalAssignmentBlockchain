@@ -38,9 +38,9 @@ services:
     container_name: redis
     ports:
       - 6379:6379
-    command: ["redis-server", "--requirepass", "redis-pwd"]
+    command: ["redis-server", "--requirepass", "redis-pwd", "--appendonly", "yes"]
     volumes:
-      - ./.containers/db:/data
+      - ./.containers/redis_data:/data
     restart: unless-stopped
     networks:
       - technicalassignment
