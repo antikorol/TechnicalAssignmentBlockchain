@@ -10,35 +10,31 @@ using TechnicalAssignment.BlockchainCollector.Application.Pagination;
 using TechnicalAssignment.BlockchainCollector.Application.Services;
 using TechnicalAssignment.BlockchainCollector.Domain.Entities;
 using TechnicalAssignment.BlockchainCollector.Domain.Errors;
+using TechnicalAssignment.BlockchainCollector.Tests.Common;
 
 namespace TechnicalAssignment.BlockchainCollector.Application.UnitTests;
 
-public class BlockchainServiceTests
+public class BlockchainServiceTests : BaseFixture
 {
-    private readonly AutoMocker _mocker;
-    private readonly Fixture _fixture;
     private readonly Lazy<BlockchainService> _subjectLazy;
-
     private BlockchainService Subject => _subjectLazy.Value;
 
     public BlockchainServiceTests()
     {
-        _mocker = new AutoMocker();
-        _fixture = new Fixture();
-        _subjectLazy = new Lazy<BlockchainService>(() => _mocker.CreateInstance<BlockchainService>());
+        _subjectLazy = new Lazy<BlockchainService>(() => GetSubject<BlockchainService>());
 
-        _mocker.Use<IMapper>(new MapperlyMapper());
+        Mocker.Use<IMapper>(new MapperlyMapper());
     }
 
     [Fact]
     public async Task GetLastBlockAsync_CoinValidationFails_ReturnsFailedResult()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
         var error = ValidationErrors.CoinNotSupported(coin);
         
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
                .Setup(v => v.Validate(coin, chain))
                .Returns(Result.Fail(error));
 
@@ -57,11 +53,11 @@ public class BlockchainServiceTests
     public async Task GetLastBlockAsync_ChainValidationFails_ReturnsFailedResult()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
         var error = ValidationErrors.CoinNotSupported(chain);
 
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
                .Setup(v => v.Validate(coin, chain))
                .Returns(Result.Fail(error));
 
@@ -80,22 +76,22 @@ public class BlockchainServiceTests
     public async Task GetLastBlockAsync_TooManyRequests_ReturnsRateLimitError()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
         
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
             .Setup(v => v.Validate(coin, chain))
             .Returns(Result.Ok());
         
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.StatusCode)
             .Returns(HttpStatusCode.TooManyRequests);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(false);
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync(coin, chain, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
 
         // Act
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
@@ -112,22 +108,22 @@ public class BlockchainServiceTests
     public async Task GetLastBlockAsync_BadResponse_ReturnsApiError()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
         
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
             .Setup(v => v.Validate(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Result.Ok());
         
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.StatusCode)
             .Returns(HttpStatusCode.BadGateway);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(false);
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync(coin, chain, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
 
         // Act
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
@@ -144,22 +140,22 @@ public class BlockchainServiceTests
     public async Task GetLastBlockAsync_ContentIsNull_ReturnsNotFound()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
         
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
             .Setup(v => v.Validate(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Result.Ok());
         
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.StatusCode)
             .Returns(HttpStatusCode.OK);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(true);
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync(coin, chain, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
 
         // Act
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
@@ -175,26 +171,26 @@ public class BlockchainServiceTests
     public async Task GetLastBlockAsync_Successful_ReturnsBlockchain()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
-        var dto = _fixture.Create<BlockchainDto>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
+        var dto = Fixture.Create<BlockchainDto>();
         
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
             .Setup(v => v.Validate(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Result.Ok());
         
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.StatusCode)
             .Returns(HttpStatusCode.OK);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(true);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
           .Setup(s => s.Content)
           .Returns(dto);
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync(coin, chain, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
 
         // Act
         var result = await Subject.GetLastBlockAsync(coin, chain, CancellationToken.None);
@@ -211,8 +207,8 @@ public class BlockchainServiceTests
     public async Task AppendToHistoryAsync_ExistingBlock_SkipsAdd()
     {
         // Arrange
-        var block = _fixture.Create<Blockchain>();
-        _mocker.GetMock<IBlockchainRepository>()
+        var block = Fixture.Create<Blockchain>();
+        Mocker.GetMock<IBlockchainRepository>()
             .Setup(r => r.FindByHashAsync(block.Hash, It.IsAny<CancellationToken>()))
             .ReturnsAsync(block);
 
@@ -220,9 +216,9 @@ public class BlockchainServiceTests
         await Subject.AppendToHistoryAsync(block, CancellationToken.None);
 
         // Assert
-        _mocker.GetMock<IBlockchainRepository>()
+        Mocker.GetMock<IBlockchainRepository>()
             .Verify(r => r.AddAsync(It.IsAny<Blockchain>(), It.IsAny<CancellationToken>()), Times.Never);
-        _mocker.GetMock<IUnitOfWork>()
+        Mocker.GetMock<IUnitOfWork>()
             .Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
@@ -230,8 +226,8 @@ public class BlockchainServiceTests
     public async Task AppendToHistoryAsync_NewBlock_AddsAndSaves()
     {
         // Arrange
-        var block = _fixture.Create<Blockchain>();
-        _mocker.GetMock<IBlockchainRepository>()
+        var block = Fixture.Create<Blockchain>();
+        Mocker.GetMock<IBlockchainRepository>()
             .Setup(r => r.FindByHashAsync(block.Hash, It.IsAny<CancellationToken>()))
             .ReturnsAsync(default(Blockchain));
 
@@ -239,9 +235,9 @@ public class BlockchainServiceTests
         await Subject.AppendToHistoryAsync(block, CancellationToken.None);
 
         // Assert
-        _mocker.GetMock<IBlockchainRepository>()
+        Mocker.GetMock<IBlockchainRepository>()
             .Verify(r => r.AddAsync(It.IsAny<Blockchain>(), It.IsAny<CancellationToken>()), Times.Once);
-        _mocker.GetMock<IUnitOfWork>()
+        Mocker.GetMock<IUnitOfWork>()
             .Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -249,16 +245,16 @@ public class BlockchainServiceTests
     public async Task LoadHistoryAsync_ValidationFails_ReturnsFailedResult()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
 
         var error = ValidationErrors.CoinNotSupported(coin);
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
                .Setup(v => v.Validate(coin, chain))
                .Returns(Result.Fail(error));
 
         // Act
-        var result = await Subject.LoadHistoryAsync(coin, chain, _fixture.Create<uint>(), _fixture.Create<uint>(), CancellationToken.None);
+        var result = await Subject.LoadHistoryAsync(coin, chain, Fixture.Create<uint>(), Fixture.Create<uint>(), CancellationToken.None);
 
         // Assert
         result.IsFailed.ShouldBeTrue();
@@ -272,11 +268,11 @@ public class BlockchainServiceTests
     public async Task LoadHistoryAsync_Success_ReturnsPagedItems()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
-        var offset = _fixture.Create<uint>();
-        var limit = _fixture.Create<uint>();
-        var block = _fixture.Create<Blockchain>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
+        var offset = Fixture.Create<uint>();
+        var limit = Fixture.Create<uint>();
+        var block = Fixture.Create<Blockchain>();
         var paged = new PagedItems<Blockchain>(
             new[] { block },
             offset,
@@ -284,11 +280,11 @@ public class BlockchainServiceTests
             true
         );
 
-        _mocker.GetMock<IBlockchainValidator>()
+        Mocker.GetMock<IBlockchainValidator>()
             .Setup(v => v.Validate(coin, chain))
             .Returns(Result.Ok());
 
-        _mocker.GetMock<IBlockchainRepository>()
+        Mocker.GetMock<IBlockchainRepository>()
                .Setup(r => r.LoadHistoryAsync($"{coin}.{chain}", offset, limit, It.IsAny<CancellationToken>()))
                .ReturnsAsync(paged);
 

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
 using System.Net;
@@ -7,80 +6,44 @@ using System.Net.Http.Json;
 using TechnicalAssignment.BlockchainCollector.API.Contracts.Responses;
 using TechnicalAssignment.BlockchainCollector.Application.Blockcypher;
 using TechnicalAssignment.BlockchainCollector.Application.Blockcypher.Dtos;
-using Testcontainers.PostgreSql;
-using Testcontainers.Redis;
+using TechnicalAssignment.BlockchainCollector.Tests.Common;
 
 namespace TechnicalAssignment.BlockchainCollector.API.FunctionalTests;
 
-public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
+public sealed class BlockchainCollectorApiFunctionalTests : ContainerizedWebAppTestBase
 {
-    private readonly AutoMocker _mocker;
-    private readonly Fixture _fixture;
     private readonly WebApplicationFactory<Program> _applicationFactory;
-
-    private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:17")
-        .WithDatabase("blockchain-db")
-        .WithUsername("postgres")
-        .WithPassword("postgres-pwd")
-        .Build();
-
-    private readonly RedisContainer _redisContainer = new RedisBuilder()
-        .WithImage("redis:7.2")
-        .Build();
 
     public BlockchainCollectorApiFunctionalTests()
     {
-        _mocker = new AutoMocker();
-        _fixture = new Fixture();
-
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(true);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
           .Setup(s => s.Content)
           .Returns(default(BlockchainDto));
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
 
-        _applicationFactory = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureAppConfiguration((context, configBuilder) =>
-                {
-                    var overrides = new Dictionary<string, string>
-                    {
-                        { "Postgres:ConnectionString", _postgresContainer.GetConnectionString() },
-                        { "Redis:ConnectionString", _redisContainer.GetConnectionString() }
-                    };
-
-                    configBuilder.AddInMemoryCollection(overrides!);
-                });
-
-                builder.ConfigureServices(services =>
-                {
-                    RemoveRegistration(services, typeof(IBlockchainSdk));
-                    services.AddSingleton<IBlockchainSdk>(_mocker.Get<IBlockchainSdk>());
-                });
-            });
+        _applicationFactory = CreateApplicationFactory<Program>();
     }
 
     [Fact]
     public async Task GetLastBlockchain_CoinAndChainSupported_ReturnsResult()
     {
         // Arrange
-        var dto = _fixture.Create<BlockchainDto>();
+        var dto = Fixture.Create<BlockchainDto>();
 
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(true);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
           .Setup(s => s.Content)
           .Returns(dto);
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync("btc", "main", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
 
         using var client = _applicationFactory.CreateClient();
 
@@ -98,7 +61,7 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     public async Task GetLastBlockchain_CoinIsNotSupported_ReturnsBadRequest()
     {
         // Arrange
-        var invalidCoin = _fixture.Create<string>();
+        var invalidCoin = Fixture.Create<string>();
         using var client = _applicationFactory.CreateClient();
 
         // Act
@@ -106,7 +69,7 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-        
+
         var badRequest = await response.Content.ReadFromJsonAsync<BadRequestResponse>();
         badRequest.ShouldNotBeNull();
         badRequest.Code.ShouldBe("Validation.CoinNotSupported");
@@ -116,15 +79,15 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     public async Task GetLastBlockchain_RateLimitExceeded_ReturnsBadRequest()
     {
         // Arrange
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
            .Setup(s => s.StatusCode)
            .Returns(HttpStatusCode.TooManyRequests);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(false);
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync("btc", "main", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
 
         using var client = _applicationFactory.CreateClient();
 
@@ -133,7 +96,7 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-        
+
         var badRequest = await response.Content.ReadFromJsonAsync<BadRequestResponse>();
         badRequest.ShouldNotBeNull();
         badRequest.Code.ShouldBe("Blockchain.RateLimitExceeded");
@@ -143,18 +106,18 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     public async Task GetBlockchainHistory_CoinAndChainSupported_ReturnsResult()
     {
         // Arrange
-        var dto = _fixture.Create<BlockchainDto>();
+        var dto = Fixture.Create<BlockchainDto>();
 
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(true);
-        _mocker.GetMock<IApiResponse<BlockchainDto>>()
+        Mocker.GetMock<IApiResponse<BlockchainDto>>()
           .Setup(s => s.Content)
           .Returns(dto);
-        _mocker.GetMock<IBlockchainSdk>()
+        Mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync("btc", "main", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
-        
+            .ReturnsAsync(Mocker.Get<IApiResponse<BlockchainDto>>());
+
         using var client = _applicationFactory.CreateClient();
 
         // Act
@@ -162,7 +125,7 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
-        
+
         var blockchain = await response.Content.ReadFromJsonAsync<BlockchainHistoryResponse>();
         blockchain.ShouldNotBeNull();
 
@@ -172,7 +135,7 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     public async Task GetBlockchainHistory_CoinIsNotSupported_ReturnsBadRequest()
     {
         // Arrange
-        var invalidCoin = _fixture.Create<string>();
+        var invalidCoin = Fixture.Create<string>();
         using var client = _applicationFactory.CreateClient();
 
         // Act
@@ -186,28 +149,14 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
         badRequest.Code.ShouldBe("Validation.CoinNotSupported");
     }
 
-    public async Task InitializeAsync()
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        await _postgresContainer.StartAsync();
-        await _redisContainer.StartAsync();
+        RemoveRegistration(services, typeof(IBlockchainSdk));
+        services.AddSingleton<IBlockchainSdk>(Mocker.Get<IBlockchainSdk>());
     }
 
-    public async Task DisposeAsync()
+    protected override void OnDispose()
     {
-        await _postgresContainer.StopAsync();
-        await _redisContainer.StopAsync();
         _applicationFactory.Dispose();
-    }
-
-    private static void RemoveRegistration(IServiceCollection services, Type type)
-    {
-        var descriptors = services
-            .Where(d => d.ServiceType == type)
-            .ToArray();
-
-        foreach (var descriptor in descriptors)
-        {
-            services.Remove(descriptor);
-        }
     }
 }

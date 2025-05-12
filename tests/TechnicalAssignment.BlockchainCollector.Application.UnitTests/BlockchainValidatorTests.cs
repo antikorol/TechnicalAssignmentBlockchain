@@ -2,29 +2,26 @@
 using TechnicalAssignment.BlockchainCollector.Application.Configurations;
 using TechnicalAssignment.BlockchainCollector.Application.Validators;
 using TechnicalAssignment.BlockchainCollector.Domain.Errors;
+using TechnicalAssignment.BlockchainCollector.Tests.Common;
 
 namespace TechnicalAssignment.BlockchainCollector.Application.UnitTests;
 
-public class BlockchainValidatorTests
+public class BlockchainValidatorTests : BaseFixture
 {
-    private readonly AutoMocker _mocker;
-    private readonly Fixture _fixture;
     private readonly Lazy<BlockchainValidator> _subjectLazy;
 
     private BlockchainValidator Subject => _subjectLazy.Value;
 
     public BlockchainValidatorTests()
     {
-        _mocker = new AutoMocker();
-        _fixture = new Fixture();
-        _subjectLazy = new Lazy<BlockchainValidator>(() => _mocker.CreateInstance<BlockchainValidator>());
+        _subjectLazy = new Lazy<BlockchainValidator>(GetSubject<BlockchainValidator>);
     }
 
     [Fact]
     public void Validate_NoCoinsConfigured_ReturnsFailedResult()
     {
         // Arrange
-        _mocker.GetMock<IOptions<BlockchainOptions>>()
+        Mocker.GetMock<IOptions<BlockchainOptions>>()
             .Setup(o => o.Value)
             .Returns(new BlockchainOptions { Coins = Array.Empty<Coin>() });
 
@@ -43,12 +40,12 @@ public class BlockchainValidatorTests
     public void Validate_CoinIsNotSupported_ReturnsFailedResult()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
 
-        _mocker.GetMock<IOptions<BlockchainOptions>>()
+        Mocker.GetMock<IOptions<BlockchainOptions>>()
             .Setup(o => o.Value)
-            .Returns(new BlockchainOptions { Coins = [new Coin { Code = _fixture.Create<string>(), Chain = chain }] });
+            .Returns(new BlockchainOptions { Coins = [new Coin { Code = Fixture.Create<string>(), Chain = chain }] });
 
         // Act
         var result = Subject.Validate(coin, chain);
@@ -65,12 +62,12 @@ public class BlockchainValidatorTests
     public void Validate_ChainIsNotSupported_ReturnsFailedResult()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
 
-        _mocker.GetMock<IOptions<BlockchainOptions>>()
+        Mocker.GetMock<IOptions<BlockchainOptions>>()
             .Setup(o => o.Value)
-            .Returns(new BlockchainOptions { Coins = [new Coin { Code = coin, Chain = _fixture.Create<string>() }] });
+            .Returns(new BlockchainOptions { Coins = [new Coin { Code = coin, Chain = Fixture.Create<string>() }] });
 
         // Act
         var result = Subject.Validate(coin, chain);
@@ -87,10 +84,10 @@ public class BlockchainValidatorTests
     public void Validate_CoinAndChainAreSupported_ReturnsSuccessResult()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
 
-        _mocker.GetMock<IOptions<BlockchainOptions>>()
+        Mocker.GetMock<IOptions<BlockchainOptions>>()
             .Setup(o => o.Value)
             .Returns(new BlockchainOptions { Coins = [new Coin { Code = coin, Chain = chain }] });
 
@@ -105,10 +102,10 @@ public class BlockchainValidatorTests
     public void Validate_CoinAndChainAreUpperCased_ReturnsSuccessResult()
     {
         // Arrange
-        var coin = _fixture.Create<string>();
-        var chain = _fixture.Create<string>();
+        var coin = Fixture.Create<string>();
+        var chain = Fixture.Create<string>();
 
-        _mocker.GetMock<IOptions<BlockchainOptions>>()
+        Mocker.GetMock<IOptions<BlockchainOptions>>()
             .Setup(o => o.Value)
             .Returns(new BlockchainOptions { Coins = [new Coin { Code = coin, Chain = chain }] });
 

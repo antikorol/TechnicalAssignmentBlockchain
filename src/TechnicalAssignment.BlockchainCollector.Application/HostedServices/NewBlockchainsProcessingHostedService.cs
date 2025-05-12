@@ -15,8 +15,7 @@ public sealed class NewBlockchainsProcessingHostedService : BackgroundService
     public NewBlockchainsProcessingHostedService(
         IServiceProvider serviceProvider,
         IInternalServiceBus<BlockReceived> newBlocksServiceBus,
-        ILogger<NewBlockchainsProcessingHostedService> logger
-)
+        ILogger<NewBlockchainsProcessingHostedService> logger)
     {
         _serviceProvider = serviceProvider;
         _newBlocksServiceBus = newBlocksServiceBus;
