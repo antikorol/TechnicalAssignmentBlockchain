@@ -60,12 +60,12 @@ public sealed class BlockchainsCollectorHostedService : BackgroundService
                         if (!isAcuredToken)
                         {
                             _logger.LogDebug("Token not available for request within {Elapsed}", sw.Elapsed);
-                            
+
                             var cooldownTime = await _rateLimitTracker.GetCooldownTimeAsync(cancellationToken);
 
                             if (cooldownTime > TimeSpan.Zero)
                                 await Task.Delay(cooldownTime, cancellationToken);
-                            
+
                             continue;
                         }
 

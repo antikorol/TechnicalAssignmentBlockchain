@@ -1,13 +1,13 @@
 using HealthChecks.UI.Client;
-using Serilog;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Serilog;
 using TechnicalAssignment.BlockchainCollector.API.Extensions;
 using TechnicalAssignment.BlockchainCollector.API.Middlewares;
 using TechnicalAssignment.BlockchainCollector.Application.Extensions;
 using TechnicalAssignment.BlockchainCollector.Infrastructure.Extensions;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 

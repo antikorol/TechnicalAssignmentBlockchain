@@ -1,14 +1,14 @@
 ﻿using FluentResults;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using TechnicalAssignment.BlockchainCollector.Application.Blockcypher;
-using TechnicalAssignment.BlockchainCollector.Application.Interfaces;
-using TechnicalAssignment.BlockchainCollector.Domain.Entities;
-using TechnicalAssignment.BlockchainCollector.Application.Mappings;
-using MediatR;
-using TechnicalAssignment.BlockchainCollector.Domain.Events;
-using TechnicalAssignment.BlockchainCollector.Application.Pagination;
 using TechnicalAssignment.BlockchainCollector.Application.Errors;
+using TechnicalAssignment.BlockchainCollector.Application.Interfaces;
+using TechnicalAssignment.BlockchainCollector.Application.Mappings;
+using TechnicalAssignment.BlockchainCollector.Application.Pagination;
+using TechnicalAssignment.BlockchainCollector.Domain.Entities;
+using TechnicalAssignment.BlockchainCollector.Domain.Events;
 
 namespace TechnicalAssignment.BlockchainCollector.Application.Services;
 
