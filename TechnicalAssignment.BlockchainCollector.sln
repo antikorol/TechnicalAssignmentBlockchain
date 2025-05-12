@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.Blockch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.Tests.Common", "tests\TechnicalAssignment.BlockchainCollector.Tests.Common\TechnicalAssignment.BlockchainCollector.Tests.Common.csproj", "{D49394DA-5A01-4CD3-A175-A07BFE288422}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicalAssignment.BlockchainCollector.Application.IntegrationTests", "src\TechnicalAssignment.BlockchainCollector.Application.IntegrationTests\TechnicalAssignment.BlockchainCollector.Application.IntegrationTests.csproj", "{DB668147-41CF-4E50-B8A1-E29C0A333825}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{D49394DA-5A01-4CD3-A175-A07BFE288422}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D49394DA-5A01-4CD3-A175-A07BFE288422}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D49394DA-5A01-4CD3-A175-A07BFE288422}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB668147-41CF-4E50-B8A1-E29C0A333825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB668147-41CF-4E50-B8A1-E29C0A333825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB668147-41CF-4E50-B8A1-E29C0A333825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB668147-41CF-4E50-B8A1-E29C0A333825}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{A50AA1AF-6F1A-44C9-91CA-C344C080C507} = {8F518FC6-DC94-48CE-9DFB-C480909A5E29}
 		{43B11575-D067-4E70-BC8D-508A7E66E4F4} = {DD9BA28B-5983-432B-98E9-3924D250B6F3}
 		{D49394DA-5A01-4CD3-A175-A07BFE288422} = {664D406C-2F83-48F0-BFC3-408D5CB53C65}
+		{DB668147-41CF-4E50-B8A1-E29C0A333825} = {C03B32EF-4CB8-4047-AC8D-66BD49C7D281}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3CB609D9-5D54-4C11-A371-DAAC8B74E430}

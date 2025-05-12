@@ -35,6 +35,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="TechnicalAssignment.BlockchainCollector.API.FunctionalTests" />
+        <InternalsVisibleTo Include="TechnicalAssignment.BlockchainCollector.Application.IntegrationTests" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
 
