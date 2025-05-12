@@ -33,6 +33,7 @@ public class BlockcypherRateLimitTrackerTests
     [Fact]
     public async Task AcquireTokenAsync_TransactionSucceeds_ReturnsTrue()
     {
+        // Arrange
         _mocker.GetMock<IOptions<BlockcypherRateLimitOptions>>()
             .Setup(o => o.Value)
             .Returns(new BlockcypherRateLimitOptions
@@ -42,13 +43,17 @@ public class BlockcypherRateLimitTrackerTests
                     new RateLimitRule { Name = "hour-limit", Period = Period.Hour, Requests = 5 }
                 }
             });
+
         _mocker.GetMock<ITransaction>()
             .Setup(t => t.ExecuteAsync(It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
+        // Act
         var result = await Subject.AcquireTokenAsync(CancellationToken.None);
 
+        // Assert
         result.ShouldBeTrue();
+
         _mocker.GetMock<ITransaction>()
             .Verify(tx => tx.AddCondition(It.IsAny<Condition>()), Times.Once);
         _mocker.GetMock<ITransaction>()
@@ -62,7 +67,9 @@ public class BlockcypherRateLimitTrackerTests
     [Fact]
     public async Task GetCooldownTimeAsync_AllRulesExceeded_ReturnsMaxTtl()
     {
-        _mocker.GetMock<IOptions<BlockcypherRateLimitOptions>>()
+        // Arrange
+        _mocker
+            .GetMock<IOptions<BlockcypherRateLimitOptions>>()
             .Setup(o => o.Value)
             .Returns(new BlockcypherRateLimitOptions
             {
@@ -72,24 +79,29 @@ public class BlockcypherRateLimitTrackerTests
                     new RateLimitRule { Name = "rule2", Period = Period.Hour, Requests = 1 }
                 }
             });
+
         _mocker.GetMock<IDatabase>()
             .Setup(db => db.HashLengthAsync(It.Is<RedisKey>(k => k.ToString().Contains("rule1")), It.IsAny<CommandFlags>()))
             .ReturnsAsync(1);
         _mocker.GetMock<IDatabase>()
             .Setup(db => db.HashLengthAsync(It.Is<RedisKey>(k => k.ToString().Contains("rule2")), It.IsAny<CommandFlags>()))
             .ReturnsAsync(1);
+        
         _mocker.GetMock<TimeProvider>()
             .Setup(p => p.GetUtcNow())
             .Returns(new DateTimeOffset(2030, 1, 1, 1, 1, 0, TimeSpan.Zero));
 
+        // Act
         var result = await Subject.GetCooldownTimeAsync(CancellationToken.None);
 
+        // Assert
         result.ShouldBe(TimeSpan.FromMinutes(59));
     }
 
     [Fact]
     public async Task GetCooldownTimeAsync_NoRulesExceeded_ReturnsZero()
     {
+        // Arrange
         _mocker.GetMock<IOptions<BlockcypherRateLimitOptions>>()
             .Setup(o => o.Value)
             .Returns(new BlockcypherRateLimitOptions
@@ -103,8 +115,10 @@ public class BlockcypherRateLimitTrackerTests
             .Setup(db => db.HashLengthAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(1);
 
+        // Act
         var result = await Subject.GetCooldownTimeAsync(CancellationToken.None);
 
+        // Assert
         result.ShouldBe(TimeSpan.Zero);
     }
 }

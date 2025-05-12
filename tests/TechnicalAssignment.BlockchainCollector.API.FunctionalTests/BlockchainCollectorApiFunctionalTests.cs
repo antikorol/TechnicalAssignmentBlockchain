@@ -69,7 +69,9 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     [Fact]
     public async Task GetLastBlockchain_CoinAndChainSupported_ReturnsResult()
     {
+        // Arrange
         var dto = _fixture.Create<BlockchainDto>();
+
         _mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(true);
@@ -79,10 +81,13 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
         _mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync("btc", "main", It.IsAny<CancellationToken>()))
             .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+
         using var client = _applicationFactory.CreateClient();
 
+        // Act
         var response = await client.GetAsync("api/public/btc/main/");
 
+        // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var blockchain = await response.Content.ReadFromJsonAsync<BlockchainResponse>();
         blockchain.ShouldNotBeNull();
@@ -92,12 +97,16 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     [Fact]
     public async Task GetLastBlockchain_CoinIsNotSupported_ReturnsBadRequest()
     {
+        // Arrange
         var invalidCoin = _fixture.Create<string>();
         using var client = _applicationFactory.CreateClient();
 
+        // Act
         var response = await client.GetAsync($"api/public/{invalidCoin}/main/");
 
+        // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        
         var badRequest = await response.Content.ReadFromJsonAsync<BadRequestResponse>();
         badRequest.ShouldNotBeNull();
         badRequest.Code.ShouldBe("Validation.CoinNotSupported");
@@ -106,6 +115,7 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     [Fact]
     public async Task GetLastBlockchain_RateLimitExceeded_ReturnsBadRequest()
     {
+        // Arrange
         _mocker.GetMock<IApiResponse<BlockchainDto>>()
            .Setup(s => s.StatusCode)
            .Returns(HttpStatusCode.TooManyRequests);
@@ -115,11 +125,15 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
         _mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync("btc", "main", It.IsAny<CancellationToken>()))
             .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+
         using var client = _applicationFactory.CreateClient();
 
+        // Act
         var response = await client.GetAsync("api/public/btc/main/");
 
+        // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        
         var badRequest = await response.Content.ReadFromJsonAsync<BadRequestResponse>();
         badRequest.ShouldNotBeNull();
         badRequest.Code.ShouldBe("Blockchain.RateLimitExceeded");
@@ -128,7 +142,9 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     [Fact]
     public async Task GetBlockchainHistory_CoinAndChainSupported_ReturnsResult()
     {
+        // Arrange
         var dto = _fixture.Create<BlockchainDto>();
+
         _mocker.GetMock<IApiResponse<BlockchainDto>>()
             .Setup(s => s.IsSuccessStatusCode)
             .Returns(true);
@@ -138,11 +154,15 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
         _mocker.GetMock<IBlockchainSdk>()
             .Setup(s => s.GetBlockchainAsync("btc", "main", It.IsAny<CancellationToken>()))
             .ReturnsAsync(_mocker.Get<IApiResponse<BlockchainDto>>());
+        
         using var client = _applicationFactory.CreateClient();
 
+        // Act
         var response = await client.GetAsync("api/public/btc/main/history?offset=0&limit=1");
 
+        // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        
         var blockchain = await response.Content.ReadFromJsonAsync<BlockchainHistoryResponse>();
         blockchain.ShouldNotBeNull();
 
@@ -151,12 +171,16 @@ public class BlockchainCollectorApiFunctionalTests : IAsyncLifetime
     [Fact]
     public async Task GetBlockchainHistory_CoinIsNotSupported_ReturnsBadRequest()
     {
+        // Arrange
         var invalidCoin = _fixture.Create<string>();
         using var client = _applicationFactory.CreateClient();
 
+        // Act
         var response = await client.GetAsync($"api/public/{invalidCoin}/main/?offset=0&limit=1");
 
+        // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+
         var badRequest = await response.Content.ReadFromJsonAsync<BadRequestResponse>();
         badRequest.ShouldNotBeNull();
         badRequest.Code.ShouldBe("Validation.CoinNotSupported");
